@@ -1,0 +1,22 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore Antigravity artifacts
+.gemini/
+
+# Node
+node_modules/
+dist/
+
+# Java
+target/
+*.class
+*.jar
+*.war

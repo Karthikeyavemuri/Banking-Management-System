@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bms_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bms_db
+      MYSQL_USER: bms_user
+      MYSQL_PASSWORD: bms_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bms_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bms_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: bms_user
+      SPRING_DATASOURCE_PASSWORD: bms_password
+    restart: on-failure
+    networks:
+      - bms-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bms_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: on-failure
+    networks:
+      - bms-network
+
+volumes:
+  mysql_data:
+
+networks:
+  bms-network:
+    driver: bridge
