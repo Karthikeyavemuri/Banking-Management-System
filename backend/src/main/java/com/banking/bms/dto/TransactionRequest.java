@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Data
 public class TransactionRequest {
     
-    @NotBlank(message = "Source account number is required for withdrawal/transfer")
     private String sourceAccountNumber;
     
     private String destinationAccountNumber;

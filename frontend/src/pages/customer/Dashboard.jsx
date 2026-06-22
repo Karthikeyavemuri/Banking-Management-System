@@ -8,22 +8,32 @@ const Dashboard = () => {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    try {
+      const custRes = await api.get(`/customers/user/${user.id}`);
+      setCustomer(custRes.data);
+      
+      const accRes = await api.get(`/accounts/customer/${custRes.data.id}`);
+      setAccounts(accRes.data);
+    } catch (error) {
+      console.error("Error fetching dashboard data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const custRes = await api.get(`/customers/user/${user.id}`);
-        setCustomer(custRes.data);
-        
-        const accRes = await api.get(`/accounts/customer/${custRes.data.id}`);
-        setAccounts(accRes.data);
-      } catch (error) {
-        console.error("Error fetching dashboard data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     if (user) fetchData();
   }, [user]);
+
+  const handleOpenAccount = async (type) => {
+    try {
+      await api.post('/accounts', { customerId: customer.id, accountType: type });
+      fetchData(); // refresh accounts
+    } catch (error) {
+      alert("Failed to open account. Please try again.");
+    }
+  };
 
   if (loading) return <div className="text-center mt-5 text-light">Loading Dashboard...</div>;
 
@@ -48,10 +58,19 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <h3 className="mb-3">My Accounts</h3>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h3>My Accounts</h3>
+        {customer && (
+          <div>
+            <button onClick={() => handleOpenAccount('SAVINGS')} className="btn-primary-custom me-2" style={{ padding: '8px 16px', fontSize: '14px' }}>Open Savings Account</button>
+            <button onClick={() => handleOpenAccount('CURRENT')} className="btn-primary-custom" style={{ padding: '8px 16px', fontSize: '14px', background: '#3b82f6' }}>Open Current Account</button>
+          </div>
+        )}
+      </div>
+
       {accounts.length === 0 ? (
         <div className="glass-card text-center p-5">
-          <p className="text-secondary mb-0">You don't have any accounts yet. Contact admin to create one.</p>
+          <p className="text-secondary mb-3">You don't have any accounts yet. Open one to get started!</p>
         </div>
       ) : (
         <div className="row g-4">

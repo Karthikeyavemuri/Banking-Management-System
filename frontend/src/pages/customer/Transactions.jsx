@@ -88,58 +88,66 @@ const Transactions = () => {
       <h2 className="mb-4 text-light">Transactions</h2>
       
       <div className="row g-4">
-        {/* Transaction Form */}
         <div className="col-lg-5">
           <div className="glass-card">
             <h4 className="mb-3">Perform Transaction</h4>
             
-            {message && <div className="alert alert-success">{message}</div>}
-            {error && <div className="alert alert-danger">{error}</div>}
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="text-secondary">Select Account</label>
-                <select 
-                  className="input-custom form-select" 
-                  value={selectedAccount} 
-                  onChange={(e) => setSelectedAccount(e.target.value)}
-                >
-                  {accounts.map(acc => (
-                    <option key={acc.id} value={acc.accountNumber}>
-                      {acc.accountNumber} - {acc.accountType} (${acc.balance})
-                    </option>
-                  ))}
-                </select>
+            {accounts.length === 0 ? (
+              <div className="text-center py-4">
+                <p className="text-secondary mb-3">You don't have any accounts to perform transactions.</p>
+                <p className="text-light mb-0">Please go to your <strong>Dashboard</strong> to open an account first!</p>
               </div>
+            ) : (
+              <>
+                {message && <div className="alert alert-success">{message}</div>}
+                {error && <div className="alert alert-danger">{error}</div>}
 
-              <div className="mb-3">
-                <label className="text-secondary">Transaction Type</label>
-                <select className="input-custom form-select" name="type" value={txData.type} onChange={handleTxChange}>
-                  <option value="DEPOSIT">Deposit</option>
-                  <option value="WITHDRAW">Withdraw</option>
-                  <option value="TRANSFER">Transfer</option>
-                </select>
-              </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="text-secondary">Select Account</label>
+                    <select 
+                      className="input-custom form-select" 
+                      value={selectedAccount} 
+                      onChange={(e) => setSelectedAccount(e.target.value)}
+                    >
+                      {accounts.map(acc => (
+                        <option key={acc.id} value={acc.accountNumber}>
+                          {acc.accountNumber} - {acc.accountType} (${acc.balance})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              {txData.type === 'TRANSFER' && (
-                <div className="mb-3">
-                  <label className="text-secondary">Destination Account Number</label>
-                  <input type="text" className="input-custom" name="destinationAccountNumber" value={txData.destinationAccountNumber} onChange={handleTxChange} required />
-                </div>
-              )}
+                  <div className="mb-3">
+                    <label className="text-secondary">Transaction Type</label>
+                    <select className="input-custom form-select" name="type" value={txData.type} onChange={handleTxChange}>
+                      <option value="DEPOSIT">Deposit</option>
+                      <option value="WITHDRAW">Withdraw</option>
+                      <option value="TRANSFER">Transfer</option>
+                    </select>
+                  </div>
 
-              <div className="mb-3">
-                <label className="text-secondary">Amount ($)</label>
-                <input type="number" step="0.01" min="0.01" className="input-custom" name="amount" value={txData.amount} onChange={handleTxChange} required />
-              </div>
+                  {txData.type === 'TRANSFER' && (
+                    <div className="mb-3">
+                      <label className="text-secondary">Destination Account Number</label>
+                      <input type="text" className="input-custom" name="destinationAccountNumber" value={txData.destinationAccountNumber} onChange={handleTxChange} required />
+                    </div>
+                  )}
 
-              <div className="mb-4">
-                <label className="text-secondary">Remarks</label>
-                <input type="text" className="input-custom" name="remarks" value={txData.remarks} onChange={handleTxChange} />
-              </div>
+                  <div className="mb-3">
+                    <label className="text-secondary">Amount ($)</label>
+                    <input type="number" step="0.01" min="0.01" className="input-custom" name="amount" value={txData.amount} onChange={handleTxChange} required />
+                  </div>
 
-              <button type="submit" className="btn-primary-custom w-100">Submit Transaction</button>
-            </form>
+                  <div className="mb-4">
+                    <label className="text-secondary">Remarks</label>
+                    <input type="text" className="input-custom" name="remarks" value={txData.remarks} onChange={handleTxChange} />
+                  </div>
+
+                  <button type="submit" className="btn-primary-custom w-100">Submit Transaction</button>
+                </form>
+              </>
+            )}
           </div>
         </div>
 

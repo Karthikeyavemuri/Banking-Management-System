@@ -40,7 +40,22 @@ A production-ready Banking Management System built with a modern tech stack.
 ### Default Ports
 * MySQL: `3306`
 * Backend API: `8080`
-* Frontend App: `80`
+* Frontend App: `80` (or `5173` if running manually)
+
+### Running Manually (Without Docker)
+If you prefer to run the application locally without Docker, you will need two separate terminal windows. Ensure you have a local MySQL server running on port `3306`.
+
+1. **Start the Backend:**
+   ```bash
+   cd backend
+   ./mvnw spring-boot:run
+   ```
+2. **Start the Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
 ## Architecture
 * **Layered Backend**: Controller -> Service -> Repository -> Entity.
