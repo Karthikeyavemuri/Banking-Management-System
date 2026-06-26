@@ -66,4 +66,4 @@ If you prefer to run the application locally without Docker, you will need two s
 Once the backend is running, you can access the Swagger UI documentation at `http://localhost:8080/swagger-ui.html`.
 
 ---
-*Continuously maintained with regular updates to keep the Git streak alive!*
+*Daily maintained with regular updates to keep the Git streak alive!*
