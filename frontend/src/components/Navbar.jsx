@@ -24,6 +24,7 @@ const Navbar = () => {
               <>
                 <Link to="/dashboard" className="text-light text-decoration-none">Dashboard</Link>
                 <Link to="/transactions" className="text-light text-decoration-none">Transactions</Link>
+                <Link to="/profile" className="text-light text-decoration-none">Profile</Link>
               </>
             )}
             <button onClick={handleLogout} className="btn-primary-custom" style={{ padding: '6px 16px', fontSize: '14px' }}>Logout</button>

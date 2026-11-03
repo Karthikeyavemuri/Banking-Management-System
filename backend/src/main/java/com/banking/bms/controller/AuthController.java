@@ -1,5 +1,6 @@
 package com.banking.bms.controller;
 
+import com.banking.bms.dto.ChangePasswordRequest;
 import com.banking.bms.dto.JwtResponse;
 import com.banking.bms.dto.LoginRequest;
 import com.banking.bms.dto.MessageResponse;
@@ -12,6 +13,7 @@ import com.banking.bms.repository.UserRepository;
 import com.banking.bms.security.jwt.JwtUtils;
 import com.banking.bms.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -101,5 +103,24 @@ public class AuthController {
         customerRepository.save(customer);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!encoder.matches(request.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Old password is incorrect!"));
+        }
+
+        user.setPassword(encoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("Password changed successfully!"));
     }
 }

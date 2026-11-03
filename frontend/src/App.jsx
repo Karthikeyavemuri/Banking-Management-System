@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/customer/Dashboard';
 import Transactions from './pages/customer/Transactions';
+import Profile from './pages/customer/Profile';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
 function App() {
@@ -42,6 +43,15 @@ function App() {
             element={
               <ProtectedRoute roles={['ROLE_ADMIN']}>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute roles={['ROLE_CUSTOMER']}>
+                <Profile />
               </ProtectedRoute>
             } 
           />
